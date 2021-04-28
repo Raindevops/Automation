@@ -6,10 +6,18 @@ Vagrant.configure("2") do |config|
     config.vm.box_version="3.2.18"
 
     config.vm.define "main", primary: true do |main|
+        main.vm.provider :virtualbox do |vb|
+            vb.name = "main"
+        end
+        main.vm.network "private_network", ip: "192.168.33.10"
         ## main configuration
     end
 
     config.vm.define "worker" do |worker|
+        worker.vm.provider :virtualbox do |vb|
+            vb.name = "worker"
+        end
+        worker.vm.network "private_network", ip: "192.168.33.11"
         ##worker configuration
     end
 
