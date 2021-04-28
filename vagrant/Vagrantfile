@@ -1,6 +1,8 @@
 Vagrant.configure("2") do |main|
     main.vm.box = "generic/ubuntu1804"
     main.vm.box_version="3.2.18"
-    main.vm.define "foobar"
     main.vm.provision :docker
+    main.vm.provider :virtualbox do |vb|
+        vb.name = "main1"
+    end
 end
