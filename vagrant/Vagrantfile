@@ -1,24 +1,54 @@
 # Configure main vm
 
+main_boxes = [
+    {
+        :name => "main1",
+        :eth => "192.168.33.10",
+        :mem => "2048",
+        :cpu => "2",
+        :disk => "20GB"
+    }
+]
+
+worker_boxes = [
+    {
+        :name => "worker1",
+        :eth => "192.168.33.20",
+        :mem => "1024",
+        :cpu => "1",
+        :disk => "20GB"
+    }
+]
+
 Vagrant.configure("2") do |config|
     config.vm.provision :docker
     config.vm.box = "generic/ubuntu1804"
     config.vm.box_version="3.2.18"
 
-    config.vm.define "main", primary: true do |main|
-        main.vm.provider :virtualbox do |vb|
-            vb.name = "main"
+    main_boxes.each do |mbx|
+        config.vm.define mbx[:name] do |main|
+            ## main configuration
+            main.vm.provider :virtualbox do |vb|
+                vb.name = mbx[:name]
+                vb.memory = mbx[:mem]
+                vb.cpus = mbx[:cpu]
+            end
+            main.vm.network "private_network", ip: mbx[:eth]
+            main.vm.disk :disk, size: mbx[:disk], primary: true
         end
-        main.vm.network "private_network", ip: "192.168.33.10"
-        ## main configuration
     end
 
-    config.vm.define "worker" do |worker|
-        worker.vm.provider :virtualbox do |vb|
-            vb.name = "worker"
+    worker_boxes.each do |vbx| 
+        config.vm.define vbx[:name] do |worker|
+            ##worker configuration
+            worker.vm.provider :virtualbox do |vb|
+                vb.name = vbx[:name]
+                vb.memory = vbx[:mem]
+                vb.cpus = vbx[:cpu]
+            end
+            worker.vm.network "private_network", ip: vbx[:eth]
+            main.vm.disk :disk, size: vbx[:disk], primary: true
         end
-        worker.vm.network "private_network", ip: "192.168.33.11"
-        ##worker configuration
     end
 
 end
