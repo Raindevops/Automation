@@ -21,9 +21,10 @@ worker_boxes = [
 ]
 
 Vagrant.configure("2") do |config|
-    config.vm.provision :docker
     config.vm.box = "generic/ubuntu1804"
     config.vm.box_version="3.2.18"
+    config.vm.provision :docker
+    config.vm.provision :shell, inline: "apt-get update"
 
     main_boxes.each do |mbx|
         config.vm.define mbx[:name] do |main|
