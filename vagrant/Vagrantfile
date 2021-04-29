@@ -23,7 +23,7 @@ worker_boxes = [
 Vagrant.configure("2") do |config|
     config.vm.box = "generic/ubuntu1804"
     config.vm.box_version="3.2.18"
-    config.vm.provision :docker
+    # config.vm.provision :docker
 
     main_boxes.each do |mbx|
         config.vm.define mbx[:name] do |main|
@@ -39,7 +39,7 @@ Vagrant.configure("2") do |config|
             end
 
             config.vm.provision :ansible do |ansible|
-                ansible.playbook = "../ansible/main-playbook.yml"
+                ansible.playbook = "../ansible/master-playbook.yml"
                 ansible.extra_vars = {
                     node_ip: mbx[:eth]
                 }
@@ -61,7 +61,7 @@ Vagrant.configure("2") do |config|
             end
 
             config.vm.provision :ansible do |ansible|
-                ansible.playbook = "../ansible/main-playbook.yml"
+                ansible.playbook = "../ansible/worker-playbook.yml"
                 ansible.extra_vars = {
                     node_ip: vbx[:eth]
                 }
