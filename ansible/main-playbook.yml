@@ -1,6 +1,6 @@
 ---
 
-- hosts: main1
+- hosts: all
   become: yes
   roles:
     - { role: packages, tags: ["packages"] }

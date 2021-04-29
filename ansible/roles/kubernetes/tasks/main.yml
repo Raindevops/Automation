@@ -19,3 +19,6 @@
     line: KUBELET_EXTRA_ARGS=--node-ip={{ node_ip }}
     create: yes
   notify: Restart kubelet service
+
+- include: main-node.yml
+  when: node_type == "main"

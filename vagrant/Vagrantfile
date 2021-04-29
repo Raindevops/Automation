@@ -39,9 +39,10 @@ Vagrant.configure("2") do |config|
             end
 
             config.vm.provision :ansible do |ansible|
-                ansible.playbook = "../ansible/master-playbook.yml"
+                ansible.playbook = "../ansible/main-playbook.yml"
                 ansible.extra_vars = {
-                    node_ip: mbx[:eth]
+                    node_ip: mbx[:eth],
+                    node_type: "main"
                 }
             end
         end
@@ -61,9 +62,10 @@ Vagrant.configure("2") do |config|
             end
 
             config.vm.provision :ansible do |ansible|
-                ansible.playbook = "../ansible/worker-playbook.yml"
+                ansible.playbook = "../ansible/main-playbook.yml"
                 ansible.extra_vars = {
-                    node_ip: vbx[:eth]
+                    node_ip: vbx[:eth],
+                    node_type: "worker"
                 }
             end
         end

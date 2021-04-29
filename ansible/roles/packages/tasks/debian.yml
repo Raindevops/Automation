@@ -38,3 +38,8 @@
     state: present
   loop: "{{ docker_packages }}"
   notify: Restart docker
+
+- name: Add vagrant to docker group
+  user:
+    name: vagrant
+    group: docker
