@@ -24,35 +24,48 @@ Vagrant.configure("2") do |config|
     config.vm.box = "generic/ubuntu1804"
     config.vm.box_version="3.2.18"
     config.vm.provision :docker
-    config.vm.provision :shell, inline: "apt-get update"
-
-    config.vm.provision :ansible do |ansible|
-        ansible.playbook = "../ansible/main-playbook.yml"
-    end
 
     main_boxes.each do |mbx|
         config.vm.define mbx[:name] do |main|
+
             ## main configuration
+            main.vm.network "private_network", ip: mbx[:eth]
+            main.vm.disk :disk, size: mbx[:disk], primary: true
+
             main.vm.provider :virtualbox do |vb|
                 vb.name = mbx[:name]
                 vb.memory = mbx[:mem]
                 vb.cpus = mbx[:cpu]
             end
-            main.vm.network "private_network", ip: mbx[:eth]
-            main.vm.disk :disk, size: mbx[:disk], primary: true
+
+            config.vm.provision :ansible do |ansible|
+                ansible.playbook = "../ansible/main-playbook.yml"
+                ansible.extra_vars = {
+                    node_ip: mbx[:eth]
+                }
+            end
         end
     end
 
     worker_boxes.each do |vbx| 
         config.vm.define vbx[:name] do |worker|
+
             ##worker configuration
+            worker.vm.network "private_network", ip: vbx[:eth]
+            worker.vm.disk :disk, size: vbx[:disk], primary: true
+
             worker.vm.provider :virtualbox do |vb|
                 vb.name = vbx[:name]
                 vb.memory = vbx[:mem]
                 vb.cpus = vbx[:cpu]
             end
-            worker.vm.network "private_network", ip: vbx[:eth]
-            worker.vm.disk :disk, size: vbx[:disk], primary: true
+
+            config.vm.provision :ansible do |ansible|
+                ansible.playbook = "../ansible/main-playbook.yml"
+                ansible.extra_vars = {
+                    node_ip: vbx[:eth]
+                }
+            end
         end
     end
 
