@@ -1,0 +1,45 @@
+---
+
+- name: Add kubernetes apt key
+  apt_key:
+    url: "{{ kube_packages_apt_key_url }}"
+    state: present
+
+- name: Add kubernetes repo list
+  apt_repository:
+    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+    filename: 'kubernetes.list'
+
+- name: Install kube packages
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  loop: "{{ kube_packages }}"
+
+- name: Lock kube packages
+  dpkg_selections:
+    name: "{{ item }}"
+    selection: hold
+  loop: "{{ kube_packages }}"
+
+- name: Get versions
+  command: | 
+    kubeadm version
+  register: kubeadm_version
+
+- debug:
+    msg: "{{ kubeadm_version.stdout }}"
+
+- name: Install docker and its dependencies
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ docker_packages }}"
+  notify: Restart docker
+
+- name: Add vagrant to docker group
+  user:
+    name: vagrant
+    group: docker

@@ -1,17 +1,7 @@
 ---
 
-- hosts: all
+- hosts: main1
   become: yes
-  tasks:
-    - name: Install Vim
-      apt:
-        name: vim
-        state: present
-
-    - name: Vim version
-      command: |
-        vim --version
-      register: vim_version
-
-    - debug:
-        msg: "{{ vim_version }}"
+  roles:
+    - { role: packages, tags: ["packages"] }
+    - { role: kubernetes, tags: ["kube"] }

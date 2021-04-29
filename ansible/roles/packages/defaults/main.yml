@@ -1,0 +1,16 @@
+# Debian
+kube_packages_apt_key_url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+
+# Redhat
+
+# Common
+
+kube_packages:
+  - kubelet
+  - kubectl
+  - kubeadm
+
+docker_packages:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
