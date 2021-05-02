@@ -20,5 +20,11 @@
     create: yes
   notify: Restart kubelet service
 
+- debug:
+    msg: "{{ node_type }}"
+
 - include: main-node.yml
   when: node_type == "main"
+
+- include: worker-node.yml
+  when: node_type == "worker"

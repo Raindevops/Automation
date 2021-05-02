@@ -2,7 +2,7 @@
 
 - name: Copy the join token to server
   copy:
-    src: ./join-command
+    src: /home/raindevops/projects/automation/join-command
     dest: /tmp/join-command.sh
     mode: 0777
 
