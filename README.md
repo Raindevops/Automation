@@ -14,3 +14,9 @@ What does automation do for you ? :carousel_horse:
 :computer: This project is project under development, better features are coming :exclamation:
 
 :warning: Available only on Linux or MacOS :warning:
+
+## Prerequisites
+
+ - VirtualBox
+ - Ansible >= 2.9
+ - Vagrant >= 2.0
